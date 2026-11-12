@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+coverage/
+*.tsbuildinfo
+
+# Local environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local
+
+# Vite and build output
+.vite/
+dist/
+dist-ssr/

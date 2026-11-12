@@ -352,6 +352,52 @@ footer { border-top: 1px solid var(--line); background: var(--bg-2); padding-blo
 .legal { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
 @media (max-width: 820px) { .foot { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 480px) { .foot { grid-template-columns: 1fr; } }
+/* Meet the builders: two rows of member cards that drift sideways */
+.marquee { display: grid; gap: 1rem; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee-track { display: flex; gap: 1rem; width: max-content; }
+.builder { flex: none; width: 132px; display: grid; justify-items: center; gap: .55rem; padding: 1rem .75rem; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); text-align: center; text-decoration: none; color: inherit; }
+.builder .avatar { width: 60px; height: 60px; font-size: 1.1rem; }
+.builder b { font: 600 .9rem/1.2 var(--body); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.builder small { font-size: .74rem; color: var(--muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+a.builder:hover { border-color: var(--purple); }
+.builder.open { border-style: dashed; background: var(--bg-2); }
+.builders-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.5rem; color: var(--muted); font-size: .92rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track { animation: drift var(--drift, 60s) linear infinite; }
+  .marquee-track.rev { animation-direction: reverse; }
+  .marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
+}
+@keyframes drift { to { transform: translateX(calc(-50% - .5rem)); } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee { -webkit-mask-image: none; mask-image: none; }
+  .marquee-track { width: auto; flex-wrap: wrap; justify-content: center; }
+  .marquee-track [aria-hidden="true"] { display: none; }
+}
+
+/* Event gallery: photos open in a viewer, videos open on YouTube */
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.shot { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, var(--bg-2), var(--surface)); color: var(--fg); text-align: left; text-decoration: none; font: inherit; cursor: pointer; }
+.shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+.shot:hover img { transform: scale(1.04); }
+.shot:hover { border-color: var(--purple); }
+.shot figcaption { position: absolute; inset: auto 0 0 0; display: grid; gap: .2rem; padding: 2rem .9rem .8rem; background: linear-gradient(transparent, rgba(8, 5, 22, .85)); color: #f1eefb; font-size: .88rem; line-height: 1.35; }
+.shot figcaption .k-label { color: #ffb547; }
+.shot .play { position: absolute; top: 50%; left: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; display: grid; place-items: center; background: rgba(8, 5, 22, .7); border: 1px solid rgba(255, 255, 255, .35); }
+.shot .play::before { content: ""; margin-left: 4px; border-left: 16px solid #fff; border-block: 10px solid transparent; }
+.shot.soon { cursor: default; border-style: dashed; }
+.shot.soon .ph { position: absolute; inset: 0; display: grid; place-items: center; font: 500 .72rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 3rem; }
+.gallery-filter { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.gallery-filter button { font: 500 .78rem/1 var(--mono); padding: .55rem .8rem; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+.gallery-filter button[aria-pressed="true"] { background: var(--purple); border-color: var(--purple); color: #fff; }
+dialog.lightbox { width: min(1000px, calc(100% - 32px)); padding: 0; border: 0; background: transparent; color: #f1eefb; overflow: visible; }
+dialog.lightbox::backdrop { background: rgba(5, 3, 16, .88); }
+dialog.lightbox img { display: block; width: 100%; max-height: calc(100vh - 120px); object-fit: contain; border-radius: 12px; }
+.lightbox-bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .75rem; }
+.lightbox-bar .modal-close { color: #f1eefb; border-color: rgba(255, 255, 255, .3); }
+body:has(dialog.lightbox[open]) { overflow: hidden; }
+@media (max-width: 860px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .gallery { grid-template-columns: 1fr; } }
+
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 
@@ -713,6 +759,25 @@ footer { border-top: 1px solid var(--line); background: var(--bg-2); padding-blo
     </div>
   </section>
 
+  <!-- MEET THE BUILDERS -->
+  <section class="block tint" id="builders">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Our community</span>
+        <h2>Meet the builders</h2>
+        <p class="lede">Real people learning cloud together in Mississauga and the Western GTA.</p>
+      </div>
+    </div>
+    <div class="marquee" id="builders-list" aria-label="Community members">
+      <div class="marquee-track"><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Mississauga</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Brampton</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Oakville</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Toronto</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Milton</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Mississauga</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Burlington</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Etobicoke</small></div></div>
+      <div class="marquee-track rev" style="--drift:70s"><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Etobicoke</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Burlington</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Mississauga</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Milton</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Toronto</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Oakville</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Brampton</small></div><div class="builder"><div class="avatar">?</div><b>Member name</b><small>Mississauga</small></div></div>
+    </div>
+    <div class="wrap builders-foot">
+      <span>Members are shown only with their permission. Ask an organizer to add or remove your card.</span>
+      <a class="btn btn-ghost btn-sm" href="https://www.meetup.com/find/?keywords=AWS%20User%20Group%20Mississauga" target="_blank" rel="noopener">Join the group</a>
+    </div>
+  </section>
+
   <!-- RESOURCES -->
   <section class="block" id="resources">
     <div class="wrap">
@@ -738,6 +803,23 @@ footer { border-top: 1px solid var(--line); background: var(--bg-2); padding-blo
         <div><span class="k-label">Oct 23, 2026 · Amazon Quick</span><h3 style="margin-top:.4rem">Productivity agent session with Sangeeta</h3><div class="materials" style="margin-top:.75rem"><span>Recording</span><span>Slides</span><span>PDF handouts</span><span>One-pagers</span><span>Useful links</span></div></div>
         <p class="preview-note">Available once the speaker shares them</p>
       </div>
+
+      <h3 class="sub" id="gallery">Event photos &amp; videos</h3>
+      <div class="gallery-filter" role="group" aria-label="Show">
+        <button type="button" aria-pressed="true" data-kind="all">All</button>
+        <button type="button" aria-pressed="false" data-kind="photo">Photos</button>
+        <button type="button" aria-pressed="false" data-kind="video">Videos</button>
+      </div>
+      <div class="gallery" id="gallery-list">
+        <figure class="shot soon" data-kind="photo"><span class="ph">Photo coming soon</span><figcaption><span class="k-label">Oct 23, 2026</span>Amazon Quick session with Sangeeta</figcaption></figure>
+        <figure class="shot soon" data-kind="photo"><span class="ph">Photo coming soon</span><figcaption><span class="k-label">Oct 23, 2026</span>Networking after the talk</figcaption></figure>
+        <figure class="shot soon" data-kind="video"><span class="ph">Video coming soon</span><figcaption><span class="k-label">Oct 23, 2026</span>Session recording</figcaption></figure>
+      </div>
+
+      <dialog class="lightbox" id="photo-dialog" aria-label="Event photo">
+        <img alt="">
+        <div class="lightbox-bar"><span id="photo-caption"></span><button type="button" class="modal-close" data-close aria-label="Close">×</button></div>
+      </dialog>
 
       <h3 class="sub">Learning links &amp; videos</h3>
       <div class="res">
@@ -911,7 +993,47 @@ footer { border-top: 1px solid var(--line); background: var(--bg-2); padding-blo
   });
 })();
 
-// Site content: organizers, speakers, events and sponsors come from content.json.
+// Meet the builders: each row is repeated once so the sideways drift loops without a gap
+function loopMarquees() {
+  document.querySelectorAll('.marquee-track').forEach(track => {
+    track.querySelectorAll('[aria-hidden="true"]').forEach(n => n.remove());
+    [...track.children].forEach(n => {
+      const copy = n.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      if (copy.tagName === 'A') copy.tabIndex = -1;
+      track.appendChild(copy);
+    });
+  });
+}
+loopMarquees();
+
+// Event gallery: photo viewer and the All / Photos / Videos filter
+(() => {
+  const dialog = document.getElementById('photo-dialog');
+  const img = dialog.querySelector('img');
+  const caption = document.getElementById('photo-caption');
+  document.addEventListener('click', e => {
+    const shot = e.target.closest('[data-photo]');
+    if (!shot) return;
+    img.src = shot.dataset.photo;
+    img.alt = shot.dataset.caption || '';
+    caption.textContent = shot.dataset.caption || '';
+    dialog.showModal();
+  });
+  dialog.querySelector('[data-close]').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', () => { img.removeAttribute('src'); });
+
+  const buttons = [...document.querySelectorAll('.gallery-filter button')];
+  buttons.forEach(b => b.addEventListener('click', () => {
+    buttons.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('#gallery-list > *').forEach(t => {
+      t.hidden = b.dataset.kind !== 'all' && t.dataset.kind !== b.dataset.kind;
+    });
+  }));
+})();
+
+// Site content: organizers, speakers, builders, events, gallery and sponsors come from content.json.
 // The HTML already on the page stays as a fallback if the file can't be loaded.
 (() => {
   const MEETUP = 'https://www.meetup.com/find/?keywords=AWS%20User%20Group%20Mississauga';
@@ -984,6 +1106,36 @@ footer { border-top: 1px solid var(--line); background: var(--bg-2); padding-blo
         next.href = n.id ? `#ev-${n.id}` : '#events';
         next.innerHTML = `<span class="when">${day(n.d)}<small>${mon(n.d)}</small></span><span class="k">Next meetup ${level(n.level)}</span><b>${esc(n.title)}</b>`;
       }
+    },
+    builders(c) {
+      const list = c.builders || [];
+      if (!list.length) return;
+      const card = b => {
+        const first = String(b.name || '').trim().split(/\s+/)[0];
+        const inner = `${avatar(b)}<b>${esc(first)}</b><small>${esc(b.city || '')}</small>`;
+        return link(b.linkedin) ? `<a class="builder" href="${esc(b.linkedin)}"${ext(b.linkedin)}>${inner}</a>` : `<div class="builder">${inner}</div>`;
+      };
+      const half = list.length >= 8 ? Math.ceil(list.length / 2) : list.length;
+      const rows = [list.slice(0, half), list.slice(half)].filter(r => r.length);
+      document.getElementById('builders-list').innerHTML = rows
+        .map((r, i) => `<div class="marquee-track${i ? ' rev' : ''}" style="--drift:${Math.max(30, r.length * 7)}s">${r.map(card).join('')}</div>`).join('');
+      loopMarquees();
+    },
+    gallery(c) {
+      const list = (c.gallery || []).filter(g => src(g.src) || link(g.src));
+      if (!list.length) return;
+      const yt = u => (String(u).match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/) || [])[1];
+      const cap = g => `<figcaption>${g.event ? `<span class="k-label">${esc(g.event)}</span>` : ''}${esc(g.caption || '')}</figcaption>`;
+      document.getElementById('gallery-list').innerHTML = list.map(g => {
+        if (g.type === 'video') {
+          const id = yt(g.src);
+          const thumb = src(g.thumb) || (id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '');
+          const url = link(g.src);
+          return `<a class="shot" data-kind="video" href="${esc(url)}"${ext(url)} aria-label="Watch: ${esc(g.caption || 'event video')}">${thumb ? `<img src="${esc(thumb)}" alt="" loading="lazy">` : ''}<span class="play"></span>${cap(g)}</a>`;
+        }
+        const photo = src(g.src);
+        return `<button type="button" class="shot" data-kind="photo" data-photo="${esc(photo)}" data-caption="${esc([g.event, g.caption].filter(Boolean).join(' · '))}"><img src="${esc(src(g.thumb) || photo)}" alt="${esc(g.caption || '')}" loading="lazy">${cap(g)}</button>`;
+      }).join('');
     },
     sponsors(c) {
       const list = c.sponsors || [];

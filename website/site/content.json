@@ -43,6 +43,8 @@
       "linkedin": ""
     }
   ],
+  "_builders_help": "Meet the builders. Add only members who said yes. Example: {\"name\": \"Priya Shah\", \"city\": \"Mississauga\", \"photo\": \"assets/builders/priya.jpg\", \"linkedin\": \"https://www.linkedin.com/in/...\"}. Only the first name is shown. Leave the list empty to show placeholder cards.",
+  "builders": [],
   "events": [
     {
       "id": "bedrock",
@@ -136,5 +138,7 @@
       }
     }
   ],
-  "sponsors": []
+  "sponsors": [],
+  "_gallery_help": "Event photos and videos in Resources. Photo: {\"type\": \"photo\", \"src\": \"assets/gallery/oct-23-1.jpg\", \"event\": \"Oct 23, 2026\", \"caption\": \"Sangeeta on Amazon Quick\"}. Video: {\"type\": \"video\", \"src\": \"https://www.youtube.com/watch?v=VIDEO_ID\", \"event\": \"Oct 23, 2026\", \"caption\": \"Session recording\"}. Newest first.",
+  "gallery": []
 }
